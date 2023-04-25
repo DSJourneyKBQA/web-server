@@ -4,7 +4,10 @@ import { AdminService } from './admin.service';
 import {
   AdminCommentOpDto,
   AdminCommonListDto,
+  AdminEditChapterDto,
+  AdminInitChapterDto,
   AdminPostOpDto,
+  AdminUpdateDataDto,
   AdminUserOpDto,
   AdminVerifyOnlyDto,
 } from './dto/admin.dto';
@@ -88,5 +91,35 @@ export class AdminController {
   approveComment(@Body() params: AdminCommentOpDto) {
     const { token, cid } = params;
     return this.adminService.tagComment(token, cid);
+  }
+
+  @Post('/getChapterData')
+  getChapterData(@Body() params: AdminVerifyOnlyDto) {
+    const { token } = params;
+    return this.adminService.getChapterData(token);
+  }
+
+  @Post('/updateChapterData')
+  updateChapterData(@Body() params: AdminUpdateDataDto) {
+    const { token, data } = params;
+    return this.adminService.updateChapterData(token, data);
+  }
+
+  @Post('/initChapter')
+  initChapter(@Body() params: AdminInitChapterDto) {
+    const { token, title, description, content } = params;
+    return this.adminService.initChapter(token, title, description, content);
+  }
+
+  @Post('/editChapter')
+  editChapter(@Body() params: AdminEditChapterDto) {
+    const { token, cid, title, description, content } = params;
+    return this.adminService.editChapter(
+      token,
+      cid,
+      title,
+      description,
+      content,
+    );
   }
 }

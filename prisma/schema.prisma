@@ -41,7 +41,8 @@ model User {
   posts        Post[]
   comments     Comment[]
   likes        Like[]
-  studyrecords StudyRecord[]
+  studyRecords StudyRecord[]
+  TestRecord   TestRecord[]
 }
 
 model Post {
@@ -89,7 +90,7 @@ model Metadata {
 
 model Option {
   key   String @id
-  value String @db.VarChar(100)
+  value String @db.Text
 }
 
 model Like {
@@ -102,23 +103,37 @@ model Like {
 }
 
 model StudyRecord {
-  id           Int      @id @default(autoincrement())
+  rid          Int      @id @default(autoincrement())
+  cid          Int      @map("chapter_id")
   uid          Int      @map("user_id")
   score        Float    @default(0)
-  completeTime DateTime @map("complete_time")
+  completeTime DateTime @default(now()) @map("complete_time")
   valid        Boolean  @default(true)
+
+  user    User    @relation(fields: [uid], references: [uid])
+  chapter Chapter @relation(fields: [cid], references: [cid])
+}
+
+model TestRecord {
+  rid        Int      @id @default(autoincrement())
+  qid        Int      @map("question_id")
+  uid        Int      @map("user_id")
+  code       String   @db.Text
+  result     String   @db.Text
+  submitTime DateTime @default(now()) @map("complete_time")
+  pass       Boolean  @default(true)
 
   user User @relation(fields: [uid], references: [uid])
 }
 
 model Chapter {
-  id          Int     @id @default(autoincrement())
-  title       String  @db.VarChar(30)
-  description String  @db.VarChar(100)
-  content     String  @db.MediumText
-  root        Boolean @default(false)
-  children    String  @db.Text
+  cid         Int    @id @default(autoincrement())
+  title       String @db.VarChar(30)
+  description String @db.VarChar(100)
+  content     String @db.MediumText
+  tests       String @db.Text
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @map("updated_at")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @default(now()) @map("updated_at")
+  userStudyRecord StudyRecord[]
 }

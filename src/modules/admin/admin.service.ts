@@ -368,4 +368,90 @@ export class AdminService {
     });
     return ResultData.ok(null, '修改评论状态成功');
   }
+
+  async getChapterData(token) {
+    const payload = await verifyToken(token);
+    if (payload.id == -1) {
+      return ResultData.fail(401, '无效Token');
+    }
+    if (payload.role != 'ADMIN') {
+      return ResultData.fail(403, '当前用户无权进行此操作');
+    }
+    const chapterData = await this.prisma.option.findUnique({
+      where: {
+        key: 'data-chapters',
+      },
+    });
+    return ResultData.ok(chapterData.value);
+  }
+
+  async updateChapterData(token, data: string) {
+    const payload = await verifyToken(token);
+    if (payload.id == -1) {
+      return ResultData.fail(401, '无效Token');
+    }
+    if (payload.role != 'ADMIN') {
+      return ResultData.fail(403, '当前用户无权进行此操作');
+    }
+    await this.prisma.option.update({
+      where: {
+        key: 'data-chapters',
+      },
+      data: {
+        value: data,
+      },
+    });
+    return ResultData.ok(null, '更新章节数据成功');
+  }
+
+  async initChapter(
+    token: string,
+    title: string,
+    description: string,
+    content: string,
+  ) {
+    const payload = await verifyToken(token);
+    if (payload.id == -1) {
+      return ResultData.fail(401, '无效Token');
+    }
+    if (payload.role != 'ADMIN') {
+      return ResultData.fail(403, '当前用户无权进行此操作');
+    }
+    const newChapter = await this.prisma.chapter.create({
+      data: {
+        title,
+        description,
+        content,
+        tests: '[]',
+      },
+    });
+    return ResultData.ok(newChapter.cid);
+  }
+
+  async editChapter(
+    token: string,
+    cid: number,
+    title: string,
+    description: string,
+    content: string,
+  ) {
+    const payload = await verifyToken(token);
+    if (payload.id == -1) {
+      return ResultData.fail(401, '无效Token');
+    }
+    if (payload.role != 'ADMIN') {
+      return ResultData.fail(403, '当前用户无权进行此操作');
+    }
+    await this.prisma.chapter.update({
+      where: {
+        cid: Number(cid),
+      },
+      data: {
+        title,
+        description,
+        content,
+      },
+    });
+    return ResultData.ok();
+  }
 }

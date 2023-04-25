@@ -1,6 +1,14 @@
 import { PrismaClient } from '@prisma/client';
+import { MD5, PBKDF2 } from 'crypto-js';
 
 const prisma = new PrismaClient();
+
+export function passwordHash(password: string, username: string): string {
+  return PBKDF2(password, MD5(username), {
+    keySize: 4,
+    iterations: 5,
+  }).toString();
+}
 
 async function main() {
   const system = await prisma.user.upsert({
@@ -24,7 +32,7 @@ async function main() {
       name: 'admin',
       email: 'admin@blog.website',
       nickname: '管理员',
-      passwordHash: 'system',
+      passwordHash: passwordHash('123456', 'admin'),
       sex: 'SECRET',
       status: 0,
       role: 'ADMIN',
@@ -38,7 +46,7 @@ async function main() {
       name: 'testuser',
       email: 'user1@blog.website',
       nickname: '测试用户',
-      passwordHash: 'test',
+      passwordHash: passwordHash('123456', 'testuser'),
       sex: 'MALE',
       status: 0,
       role: 'USER',

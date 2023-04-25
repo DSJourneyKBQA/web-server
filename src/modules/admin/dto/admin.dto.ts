@@ -54,3 +54,55 @@ export class AdminCommentOpDto {
   @Type(() => Number)
   cid: number;
 }
+
+export class AdminUpdateDataDto {
+  @ApiProperty({ example: 'token', description: 'token' })
+  @IsNotEmpty({ message: 'token不能为空' })
+  token: string;
+
+  @ApiProperty({ example: '{}', description: '数据' })
+  @IsNotEmpty({ message: '数据不能为空' })
+  data: string;
+}
+
+export class AdminInitChapterDto {
+  @ApiProperty({ example: 'token', description: 'token' })
+  @IsNotEmpty({ message: 'token不能为空' })
+  token: string;
+
+  @ApiProperty({ example: '章节标题', description: '章节标题' })
+  @IsNotEmpty({ message: '章节标题不能为空' })
+  title: string;
+
+  @ApiProperty({ example: '章节描述', description: '章节描述' })
+  @IsNotEmpty({ message: '章节描述不能为空' })
+  description: string;
+
+  @ApiProperty({ example: '章节内容', description: '章节内容' })
+  @IsNotEmpty({ message: '章节内容不能为空' })
+  content: string;
+}
+
+export class AdminEditChapterDto {
+  @ApiProperty({ example: 'token', description: 'token' })
+  @IsNotEmpty({ message: 'token不能为空' })
+  token: string;
+
+  @ApiProperty({ example: '1', description: '章节ID' })
+  @IsNotEmpty({ message: '章节ID不能为空' })
+  @IsInt({ message: '章节ID格式错误' })
+  @Type(() => Number)
+  cid: number;
+
+  @ApiProperty({ example: '章节标题', description: '章节标题' })
+  @IsNotEmpty({ message: '章节标题不能为空' })
+  title: string;
+
+  @ApiProperty({ example: '章节描述', description: '章节描述' })
+  @IsNotEmpty({ message: '章节描述不能为空' })
+  description: string;
+
+  @ApiProperty({ example: '章节内容', description: '章节内容' })
+  @IsNotEmpty({ message: '章节内容不能为空' })
+  content: string;
+}
