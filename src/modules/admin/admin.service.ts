@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { log } from 'console';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ResultData } from 'src/type/result';
 import { verifyToken } from 'src/utils/verify';
@@ -232,6 +233,11 @@ export class AdminService {
         where: {
           type: 'POST',
           sid: pid,
+        },
+      });
+      await this.prisma.metadata.deleteMany({
+        where: {
+          pid,
         },
       });
       // 删除文章

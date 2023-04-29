@@ -458,7 +458,6 @@ export class PostService {
 
   postPreviewCut(value) {
     if (value.text.length > 100) {
-      console.log('cut');
       value.text =
         value.text
           .replace(/<video(([\s\S])*?)<\/video>|#/g, '')

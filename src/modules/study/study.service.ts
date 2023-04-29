@@ -56,6 +56,7 @@ export class StudyService {
         title: true,
         description: true,
         content: true,
+        tests: true,
       },
     });
     if (!chapter) {
@@ -73,14 +74,13 @@ export class StudyService {
     try {
       const res = await this.httpService
         .post(
-          'http://oj-server.voup.cn/api/test/getTest',
+          'http://192.168.31.190:8081/api/test/getTest',
           {
             test: content,
             id: questionId,
           },
           {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            timeout: 10000,
           },
         )
         .pipe(map((res) => res.data))
