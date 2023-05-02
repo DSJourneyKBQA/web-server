@@ -1,4 +1,4 @@
-import { Injectable, Res } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ResultData } from 'src/type/result';
@@ -74,7 +74,7 @@ export class StudyService {
     try {
       const res = await this.httpService
         .post(
-          'http://192.168.31.190:8081/api/test/getTest',
+          'http://oj-server.voup.cn/api/test/getTest',
           {
             test: content,
             id: questionId,
@@ -153,7 +153,7 @@ export class StudyService {
       }
     });
     if (!canPass) {
-      return ResultData.fail(400, '未完成本章所有测试');
+      return ResultData.fail(400, '请先完成本章所有测试');
     }
     await this.prisma.studyRecord.create({
       data: {

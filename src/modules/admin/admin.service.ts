@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { log } from 'console';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ResultData } from 'src/type/result';
 import { verifyToken } from 'src/utils/verify';
@@ -423,12 +422,18 @@ export class AdminService {
     if (payload.role != 'ADMIN') {
       return ResultData.fail(403, '当前用户无权进行此操作');
     }
+    const tests = [];
+    [...content.matchAll(/\[test id=(\d+)\]((.|\n)+?)\[test\]/g)].forEach(
+      (test) => {
+        tests.push(Number(test[1]));
+      },
+    );
     const newChapter = await this.prisma.chapter.create({
       data: {
         title,
         description,
         content,
-        tests: '[]',
+        tests: JSON.stringify(tests),
       },
     });
     return ResultData.ok(newChapter.cid);
@@ -448,6 +453,12 @@ export class AdminService {
     if (payload.role != 'ADMIN') {
       return ResultData.fail(403, '当前用户无权进行此操作');
     }
+    const tests = [];
+    [...content.matchAll(/\[test id=(\d+)\]((.|\n)+?)\[\/test\]/g)].forEach(
+      (test) => {
+        tests.push(Number(test[1]));
+      },
+    );
     await this.prisma.chapter.update({
       where: {
         cid: Number(cid),
@@ -456,6 +467,7 @@ export class AdminService {
         title,
         description,
         content,
+        tests: JSON.stringify(tests),
       },
     });
     return ResultData.ok();
