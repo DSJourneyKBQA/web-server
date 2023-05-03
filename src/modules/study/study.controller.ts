@@ -31,8 +31,8 @@ export class StudyController {
     return this.studyService.completeChapter(params);
   }
 
-  @Get('/getGatewayServerVersion')
+  @Get('/getDSServerVersion')
   getGatewayServerVersion() {
-    return this.studyService.getGatewayServerVersion();
+    return this.studyService.getDSServerVersion();
   }
 }

@@ -165,10 +165,10 @@ export class StudyService {
     return ResultData.ok();
   }
 
-  async getGatewayServerVersion() {
+  async getDSServerVersion() {
     const query = await this.prisma.option.findUnique({
       where: {
-        key: 'data-gateway-version',
+        key: 'data-ds-version',
       },
     });
     if (!query) {
