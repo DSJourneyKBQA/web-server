@@ -100,4 +100,17 @@ export class PostController {
     }
     return this.postService.cancelLike(params);
   }
+
+  @Get('/getPostTitle')
+  @ApiQuery({ name: 'pids', description: '文章ID', example: '1,2' })
+  getPostTitle(@Query() params) {
+    const { pids } = params;
+    if (pids === undefined) {
+      return ResultData.fail(-1, '无效pids');
+    }
+
+    return this.postService.getPostTitle(
+      pids.split(',').map((item) => Number(item)),
+    );
+  }
 }

@@ -456,6 +456,21 @@ export class PostService {
     return ResultData.ok();
   }
 
+  async getPostTitle(pidList: number[]) {
+    const postTitle = await this.prisma.post.findMany({
+      where: {
+        pid: {
+          in: pidList,
+        },
+      },
+      select: {
+        pid: true,
+        title: true,
+      },
+    });
+    return ResultData.ok({ postTitle });
+  }
+
   postPreviewCut(value) {
     if (value.text.length > 100) {
       value.text =

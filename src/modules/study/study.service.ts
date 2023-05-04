@@ -7,6 +7,7 @@ import { verifyToken } from 'src/utils/verify';
 import { map } from 'rxjs/operators';
 import { GetChapterListDto } from './dto/getchapter.study.dto';
 import { CompleteChapterDto } from './dto/cpchapter.study.dto';
+import { ojServiceBase } from 'src/config/service';
 
 @Injectable()
 export class StudyService {
@@ -74,13 +75,14 @@ export class StudyService {
     try {
       const res = await this.httpService
         .post(
-          'http://oj-server.voup.cn/api/test/getTest',
+          ojServiceBase + '/api/test/getTest',
           {
             test: content,
             id: questionId,
           },
           {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            timeout: 20000,
           },
         )
         .pipe(map((res) => res.data))
